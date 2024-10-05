@@ -1,0 +1,23 @@
+# Start of Selection
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+*.log
+*.env
+*.DS_Store
+*.egg
+*.egg-info/
+*.coverage
+*.pytest_cache/
+*.mypy_cache/
+*.idea/
+*.vscode/
+examples/prompts/**

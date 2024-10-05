@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prompt Doctor Debug Tool</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-top: 10px;
+        }
+        textarea, input {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+        .result-section {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <h1>Prompt Doctor Debug Tool</h1>
+    <form id="promptForm">
+        <label for="prompt_id">Prompt ID:</label>
+        <input type="text" id="prompt_id" name="prompt_id" value="{{ prompt_id }}" required>
+
+        <label for="prompt_text">Prompt Text:</label>
+        <textarea id="prompt_text" name="prompt_text" rows="10" required>{{ initial_prompt }}</textarea>
+
+        <label for="context">Context (as JSON):</label>
+        <textarea id="context" name="context" rows="5" required>{{ context }}</textarea>
+
+        <button type="submit">Test Prompt</button>
+    </form>
+
+    <div id="result" class="result-section">
+        <h2>Rendered Prompt:</h2>
+        <pre id="rendered_prompt"></pre>
+        <p>Version: <span id="version"></span></p>
+    </div>
+
+    <div id="api_result" class="result-section">
+        <h2>API Response:</h2>
+        <pre id="api_response"></pre>
+    </div>
+
+    <script>
+        document.getElementById('promptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate JSON before submitting
+            try {
+                JSON.parse(document.getElementById('context').value);
+            } catch (error) {
+                alert('Invalid JSON in context. Please check and try again.');
+                return;
+            }
+            
+            fetch('/', {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('rendered_prompt').textContent = data.rendered_prompt;
+                document.getElementById('version').textContent = data.version;
+                document.getElementById('api_response').textContent = data.api_response;
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
