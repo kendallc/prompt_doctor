@@ -64,9 +64,10 @@
     <label for="prompt_template">Prompt Template:</label>
     <textarea id="prompt_template" name="prompt_template" rows="10" required>{{ prompt_template }}</textarea>
 
-    <button type="submit" name="action" value="call_llm">Call LLM</button>
-    <button type="submit" name="action" value="save_and_quit">Save Prompt and Quit Debug</button>
-    <button type="submit" name="action" value="discard_and_quit">Discard Changes and Quit Debug</button>
+    <button type="submit" name="action" id="call_llm" value="call_llm">Call LLM</button>
+    <button type="submit" name="action" id="save_and_quit" value="save_and_quit">Save Prompt and Quit Debug</button>
+    <button type="submit" name="action" id="discard_and_quit" value="discard_and_quit">Discard Changes and Quit Debug
+    </button>
 </form>
 
 <div id="context" class="result-section">
