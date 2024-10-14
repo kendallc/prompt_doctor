@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "prompt-doctor"
 version = "0.1.0"
 authors = [
-  { name = "Your Name", email = "your.email@example.com" },
+    { name = "Your Name", email = "your.email@example.com" },
 ]
 description = "A tool for debugging and refining LLM prompts in real-time"
 readme = "README.md"
@@ -20,6 +20,10 @@ dependencies = [
     "flask",
     "jinja2",
     "openai>=1.50.0",
+]
+[project.optional-dependencies]
+dev = [
+    "selenium",
 ]
 
 [project.urls]
