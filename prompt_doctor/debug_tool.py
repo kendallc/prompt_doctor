@@ -15,9 +15,10 @@ logger = logging.getLogger(__name__)
 
 class DebugTool:
 
-    def __init__(self, oai_client: OpenAI, prompts_dir="prompts"):
+    def __init__(self, oai_client: OpenAI, prompts_dir="prompts", open_browser=True):
         self.llm_client = oai_client
         self.prompts_dir = Path(prompts_dir)
+        self.open_browser = open_browser
 
     def _call_llm(self, prompt: str, **oai_kwargs) -> ChatCompletion:
         # TODO: extend template to support multiple messages/roles
@@ -91,7 +92,8 @@ class DebugTool:
         logger.info("Debug tool started at http://127.0.0.1:5000")
 
         # Open the debug tool in the default web browser
-        webbrowser.open("http://127.0.0.1:5000")
+        if self.open_browser:
+            webbrowser.open("http://127.0.0.1:5000")
 
         # Wait for the server to finish
         server_lock.acquire(blocking=True)
