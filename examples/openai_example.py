@@ -1,32 +1,22 @@
 import os
-from prompt_doctor import PromptManager, DebugTool
+from prompt_doctor import DebugTool
 from openai import OpenAI
 
 # Set up OpenAI API key
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 OPENAI_MODEL = "gpt-4o-mini"
 
-prompt_manager = PromptManager()
-debug_tool = DebugTool(prompts_dir='prompts')
+debug_tool = DebugTool(client, prompts_dir='prompts')
 
 # Define a prompt ID and initial prompt text
 prompt_id = "my_prompt"
-initial_prompt = "This is a test prompt for {{name}}"
-
-context = {}
-
-refined_prompt = debug_tool.run(prompt_id, initial_prompt, context)
+context = {"name": "Alice", "age": 25, "location": "New York"}
 
 # Note this call may be redundant if we're using the debug tool to refine the prompt
-response = client.chat.completions.create(
+response = debug_tool.create(
     model=OPENAI_MODEL,
-    messages=[
-        {
-            "role": "system",
-            "content": "You are a friendly AI assistant. Greet the user and ask how you can help them today.",
-        },
-        {"role": "user", "content": refined_prompt},
-    ],
+    prompt_id=prompt_id,
+    context=context,
 )
 
 # Print the LLM response

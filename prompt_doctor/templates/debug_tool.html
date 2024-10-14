@@ -13,18 +13,22 @@
             max-width: 800px;
             margin: 0 auto;
         }
+
         h1 {
             color: #333;
         }
+
         label {
             display: block;
             margin-top: 10px;
         }
+
         textarea, input {
             width: 100%;
             padding: 8px;
             margin-top: 5px;
         }
+
         button {
             background-color: #4CAF50;
             border: none;
@@ -37,12 +41,14 @@
             margin-top: 10px;
             cursor: pointer;
         }
+
         #result {
             margin-top: 20px;
             padding: 10px;
             border: 1px solid #ddd;
             background-color: #f9f9f9;
         }
+
         .result-section {
             margin-top: 20px;
             padding: 10px;
@@ -52,55 +58,32 @@
     </style>
 </head>
 <body>
-    <h1>Prompt Doctor Debug Tool</h1>
-    <form id="promptForm">
-        <label for="prompt_id">Prompt ID:</label>
-        <input type="text" id="prompt_id" name="prompt_id" value="{{ prompt_id }}" required>
+<h1>Prompt Doctor Debug Tool</h1>
+<p>Prompt ID: {{ prompt_id }}</p>
+<form id="promptForm" method="post">
+    <label for="prompt_template">Prompt Template:</label>
+    <textarea id="prompt_template" name="prompt_template" rows="10" required>{{ prompt_template }}</textarea>
 
-        <label for="prompt_text">Prompt Text:</label>
-        <textarea id="prompt_text" name="prompt_text" rows="10" required>{{ initial_prompt }}</textarea>
+    <button type="submit" name="action" id="call_llm" value="call_llm">Call LLM</button>
+    <button type="submit" name="action" id="save_and_quit" value="save_and_quit">Save Prompt and Quit Debug</button>
+    <button type="submit" name="action" id="discard_and_quit" value="discard_and_quit">Discard Changes and Quit Debug
+    </button>
+</form>
 
-        <label for="context">Context (as JSON):</label>
-        <textarea id="context" name="context" rows="5" required>{{ context }}</textarea>
+<div id="context" class="result-section">
+    <h2>Template context:</h2>
+    <pre id="context">{{ context }}</pre>
+</div>
 
-        <button type="submit">Test Prompt</button>
-    </form>
+<div id="result" class="result-section">
+    <h2>Rendered Prompt:</h2>
+    <pre id="rendered_prompt">{{ rendered_prompt }}</pre>
+</div>
 
-    <div id="result" class="result-section">
-        <h2>Rendered Prompt:</h2>
-        <pre id="rendered_prompt"></pre>
-        <p>Version: <span id="version"></span></p>
-    </div>
-
-    <div id="api_result" class="result-section">
-        <h2>API Response:</h2>
-        <pre id="api_response"></pre>
-    </div>
-
-    <script>
-        document.getElementById('promptForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate JSON before submitting
-            try {
-                JSON.parse(document.getElementById('context').value);
-            } catch (error) {
-                alert('Invalid JSON in context. Please check and try again.');
-                return;
-            }
-            
-            fetch('/', {
-                method: 'POST',
-                body: new FormData(this)
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('rendered_prompt').textContent = data.rendered_prompt;
-                document.getElementById('version').textContent = data.version;
-                document.getElementById('api_response').textContent = data.api_response;
-            })
-            .catch(error => console.error('Error:', error));
-        });
-    </script>
+<div id="llm_response" class="result-section">
+    <h2>API Response:</h2>
+    {# TODO: format LLM response UI #}
+    <pre id="llm_response">{{ llm_response }}</pre>
+</div>
 </body>
 </html>
